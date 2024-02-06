@@ -1,0 +1,7 @@
+asgiref
+Django
+django-email
+django-environ
+psycopg2
+sqlparse
+tzdata
