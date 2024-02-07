@@ -211,6 +211,20 @@ class LoanListView(LoginRequiredMixin,ListView):
         print(queryset)
         return queryset
     
+def send_money_email(user,receiver, amount, subject, template):
+        message = render_to_string(template, {
+            'user' : user,
+            'amount' : amount,
+            'subject': subject,
+            'receiver': receiver
+        })
+        if subject=='Received money successfully':
+            mail_adress = user.user.email
+        else :
+            mail_adress= user.email
+        send_email = EmailMultiAlternatives(subject, '', to=[mail_adress])
+        send_email.attach_alternative(message, "text/html")
+        send_email.send()
 
 class SendMoneyView(TransactionCreateMixin):
     form_class = SendMoneyForm
@@ -238,11 +252,15 @@ class SendMoneyView(TransactionCreateMixin):
             self.request,
             'Successfully sent'
             )
+            print(receiver.user.email)
+            send_money_email(self.request.user,receiver, amount, "Send Money successfully", "sendmoney_email.html")
+            send_money_email(receiver,self.request.user, amount, "Received money successfully", "sendmoney_email.html")
             return redirect('send_money')
         except Http404:
             messages.error(
             self.request,
             f'Receiver Account Doesnt Exist',
             extra_tags='error'
+
             )
             return redirect('send_money')

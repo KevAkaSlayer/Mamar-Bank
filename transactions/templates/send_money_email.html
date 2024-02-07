@@ -1,0 +1,9 @@
+{% if subject|lower == 'send money successfully' %}
+<h3>Hello {{user.first_name}} {{user.last_name}}</h3>
+<p>Your Send request for ${{amount}} to {{receiver.user.first_name}} {{receiver.user.last_name}} has been successfully completed. After the transaction your total amount is {{user.account.balance}}</p>
+{% else %}
+<h3>Hello {{user.user.first_name}} {{user.user.last_name}}</h3>
+<p>Your have received {{amount}} from {{receiver.first_name}} {{receiver.account.last_name}} has been successfully completed. After the transaction your total amount is {{user.account.balance}}</p>
+{% endif %}
+<p>Thanks for banking with us</p>
+<p>Mamar Bank</p>
