@@ -14,6 +14,9 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="amount">
                     Amount
                 </label>
+                {% if title == 'Send Money' %}
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline" name="receiver" id="receiver" type="receiver" required placeholder="Receiver">
+                {% endif %}
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight border rounded-md border-gray-500 focus:outline-none focus:shadow-outline" name="amount" id="amount" type="number" required placeholder="Amount">
             </div>
             {% if form.amount.errors %} {% for error in form.amount.errors %}

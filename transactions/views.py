@@ -241,7 +241,7 @@ class SendMoneyView(TransactionCreateMixin):
 
         try :
 
-            receiver = get_object_or_404(UserBankAccount, account_no =receiver_string)
+            receiver = get_object_or_404(UserBankAccount, account_no = receiver_string)
 
         
             self.request.user.account.balance -= form.cleaned_data.get('amount')
@@ -259,8 +259,51 @@ class SendMoneyView(TransactionCreateMixin):
         except Http404:
             messages.error(
             self.request,
-            f'Receiver Account Doesnt Exist',
+            f'Receiver Account Doesnot Exist',
             extra_tags='error'
 
             )
             return redirect('send_money')
+        
+# class SendMoneyView(LoginRequiredMixin, CreateView):
+#     form_class = SendMoneyForm
+#     title = 'Send Money'
+#     success_url = reverse_lazy('send_money')
+
+#     def get_initial(self):
+#         initial = {'transaction_type': SENDMONEY}
+#         return initial
+
+#     def form_valid(self, form):
+#         amount = form.cleaned_data.get('amount')
+#         receiver_string = form.cleaned_data.get('receiver')
+
+#         try:
+#             receiver = get_object_or_404(UserBankAccount, account_no=receiver_string)
+
+#             if receiver == self.request.user.account:
+#                 messages.error(self.request, 'You cannot send money to yourself.')
+#                 return redirect('send_money')
+
+#             # Perform transaction logic (assuming you have a `send_money` function)
+#             transaction = send_money(self.request.user, receiver, amount)
+
+#             if transaction:
+#                 # Update balances and save changes
+#                 receiver.balance += transaction.amount
+#                 receiver.save(update_fields=['balance'])
+
+#                 send_money_email(self.request.user, receiver, transaction.amount,
+#                                  "Send Money successfully", "sendmoney_email.html")
+#                 send_money_email(receiver, self.request.user, transaction.amount,
+#                                  "Received money successfully", "sendmoney_email.html")
+#                 messages.success(self.request, 'Successfully sent money.')
+#             else:
+#                 # Handle transaction failure (e.g., insufficient funds)
+#                 messages.error(self.request, 'Transaction failed. Please try again later.')
+
+#             return redirect('send_money')
+
+#         except UserBankAccount.DoesNotExist:
+#             messages.error(self.request, 'Receiver Account Does Not Exist.')
+#             return redirect('send_money')
