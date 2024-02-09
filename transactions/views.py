@@ -82,15 +82,7 @@ class DepositMoneyView(TransactionCreateMixin):
             self.request,
             f'{"{:,.2f}".format(float(amount))}$ was deposited to your account successfully'
         )
-        # mail_subject = "Deposit Message"
-        # message = render_to_string ('deposit_email.html', {
-        #     'user' : self.request.user,
-        #     'amount' :  amount,
-        # })
-        # to_email = self.request.user.email
-        # send_email = EmailMultiAlternatives(mail_subject,'',to=[to_email])
-        # send_email.attach_alternative(message,"text/html")
-        # send_email.send()
+
 
         send_transaction_email(self.request.user,amount,"Deposit Message","deposit_email.html")
         return super().form_valid(form)
@@ -264,4 +256,8 @@ class SendMoneyView(TransactionCreateMixin):
 
             )
             return redirect('send_money')
+<<<<<<< HEAD
         
+=======
+        
+>>>>>>> d1b86893c9e40dc3f6c6b0561a9fe3fceca4396a
