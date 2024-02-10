@@ -99,16 +99,21 @@ class WithdrawMoneyView(TransactionCreateMixin):
     def form_valid(self, form):
         amount = form.cleaned_data.get('amount')
 
-        self.request.user.account.balance -= form.cleaned_data.get('amount')
-        # balance = 300
-        # amount = 5000
-        self.request.user.account.save(update_fields=['balance'])
+        status = BankruptStatus.objects.first().is_bankrupt
 
-        messages.success(
+        if status is not True :
+            self.request.user.account.balance -= form.cleaned_data.get('amount')
+            self.request.user.account.save(update_fields=['balance'])
+            messages.success(
             self.request,
-            f'Successfully withdrawn {"{:,.2f}".format(float(amount))}$ from your account'
-        )
-        send_transaction_email(self.request.user,amount,"Withdraw Message","withdraw_email.html")
+            f'Successfully withdrawn {"{:,.2f}".format(float(amount))}$ from your account')
+            
+        else :
+            messages.error(
+            self.request,
+            f'Sorry the bank has gone bankrupt ! :(')
+            return redirect('withdraw_money')
+        
         return super().form_valid(form)
 
 class LoanRequestView(TransactionCreateMixin):
