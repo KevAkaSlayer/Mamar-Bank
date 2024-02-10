@@ -256,8 +256,4 @@ class SendMoneyView(TransactionCreateMixin):
 
             )
             return redirect('send_money')
-<<<<<<< HEAD
-        
-=======
-        
->>>>>>> d1b86893c9e40dc3f6c6b0561a9fe3fceca4396a
+
